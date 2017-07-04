@@ -46,7 +46,9 @@ export default merge.smart(baseConfig, {
   output: {
     publicPath: `http://localhost:${port}/dist/`
   },
-
+  node: {
+    __dirname: true,
+  },
   module: {
     rules: [
       {
@@ -182,7 +184,7 @@ export default merge.smart(baseConfig, {
       manifest: require(manifest),
       sourceType: 'var',
     }),
-
+    new webpack.DefinePlugin({ "global.GENTLY": false }),
     /**
      * https://webpack.js.org/concepts/hot-module-replacement/
      */

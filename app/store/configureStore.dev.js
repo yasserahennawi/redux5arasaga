@@ -19,6 +19,7 @@ const configureStore = (initialState?: counterStateType) => {
   // Thunk Middleware
   middleware.push(thunk);
 
+  // ReduxSaga Middleware
   const sagaMiddleware = createSagaMiddleware()
   middleware.push(sagaMiddleware);
 

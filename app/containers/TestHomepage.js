@@ -1,15 +1,19 @@
 // @flow
 import React, { Component } from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {addCrush} from '../actions/addCrush.js'
-import {getBookings, getUsers} from '../actions/tibo.js'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { addCrush } from '../actions/addCrush.js'
+import { fetchUsers } from '../actions/users.js'
+// import {getBookings, getUsers} from '../actions/tibo.js'
 
 function viewUsers(users) {
+  console.log('viewUsers')
   var rows = [];
   for (var i=0; i < users.length; i++) {
-    rows.push(<h2>users.displayName</h2>);
+    rows.push(<h2 key={i}>{users[i].displayName}</h2>);
   }
+  console.log(rows, "rows")
+  console.log(users, "users")
   return <div>{rows}</div>;
 }
 
@@ -37,7 +41,11 @@ class TestHomepage extends Component {
           onClick={()=>{ this.props.addCrush() }} >
           click me to show users
         </div>
-        {viewUsers(this.state.users)}
+        <div
+          onClick={()=>{ this.props.fetchUsers() }} >
+          click me to FETCH YASTAA users
+        </div>
+        {viewUsers(this.props.users)}
       </div>
     );
   }
@@ -47,8 +55,8 @@ class TestHomepage extends Component {
 function mapStateToProps(state) {
   return {
     user: state.CrushReducer,
-    users: state.UsersReducer,
-    booking: state.BookingReducer,
+    users: state.UserReducer,
+    // booking: state.BookingReducer,
   };
 }
 
@@ -56,8 +64,8 @@ function mapStateToProps(state) {
 //      > now UserList has this.props.selectUser
 const matchDispatchToProps = {
   addCrush: addCrush,
-  getBookings: getBookings,
-  getUsers: getUsers,
+  // getBookings: getBookings,
+  fetchUsers: fetchUsers,
 };
 
 // We don't want to return the plain UserList (component) anymore, we want to return the smart Container

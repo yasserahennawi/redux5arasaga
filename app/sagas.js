@@ -1,18 +1,35 @@
+import request from 'superagent-bluebird-promise';
 import { take, call, put, takeEvery, all } from 'redux-saga/effects'
 import { addCrushSuccess } from 'actions/addCrush';
-// import request from 'superagent-bluebird-promise';
+// import { fetchBookingsSuccess, fetchBookingsFailed } from 'actions/bookings';
+import { fetchUsersSuccess, fetchUsersFailed } from 'actions/users';
+import 'whatwg-fetch';
 
-// export function* helloSaga() {
-//   console.log('Hello Sagas!')
-// }
+export function* helloSaga() {
+  console.log('Hello Sagas!')
+}
 
-// function* fetchAll() {
-//   const users  = yield call(request.get(`https://ostlerapi.herokuapp.com/api/users`),
-//         bookings  = yield call(request.get(`https://ostlerapi.herokuapp.com/api/bookings`)
-//   yield put({ type: 'USERS_RECEIVED', users })
-//   yield put({ type: 'BOOKINGS_RECEIVED', bookings })
-// }
-//
+function* fetchUsers() {
+  try {
+    const api = 'https://ostlerapi.herokuapp.com/api/users';
+    const res  = yield call(() => request.get(api))
+    // const users  = [
+    //   {displayName: "asdjsad"},
+    //   {displayName: "sadji"}
+    // ]
+    // const users = res.json();
+    // console.log('sdfsdfsdfsdfs', users);
+    yield put(fetchUsersSuccess(res.body))
+  }
+  catch(error) {
+    yield put(fetchUsersFailed(error))
+  }
+}
+
+function* watchFetchUsers() {
+  yield takeEvery('FETCH_USERS', fetchUsers)
+}
+
 // export function* watchFetchAll() {
 //   yield takeEvery('USERS_RECEIVED', users)
 //   yield takeEvery('BOOKINGS_RECEIVED', bookings)
@@ -42,8 +59,8 @@ export default function* rootSaga() {
   });
 
 
-  // yield all([
-  //   helloSaga(),
-  //   watchFetchAll()
-  // ])
+  yield all([
+    helloSaga(),
+    watchFetchUsers()
+  ])
 };
